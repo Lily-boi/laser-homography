@@ -1,6 +1,3 @@
-import cv2
-import numpy as np
-
 # me - this DAT
 # 
 # channel - the Channel object which has changed
@@ -11,17 +8,21 @@ import numpy as np
 # Make sure the corresponding toggle is enabled in the CHOP Execute DAT.
 
 def onOffToOn(channel, sampleIndex, val, prev):
-	original_points = np.array([[-1, -1], [1, -1], [1, 1], [-1, 1]], dtype='float32')
-	coords = op('coords')
-	target_points = []
-	for i in range(4):
-		target_points.append([float(coords[i, 0]), float(coords[i, 1])])
-	target_points = np.array(target_points)
-	H, _ = cv2.findHomography(original_points, target_points)
-	homo = op('Homography')
-	for i in range(3):
-		for j in range(3):
-			homo[i, j] = H[i, j]
+	ur = op('../ur')
+	ul = op('../ul')
+	dr = op('../dr')
+	dl = op('../dl')
+	xmax = ur.par.repositionxmax
+	ymax = ur.par.repositionymax
+	ur.par.x = xmax
+	ur.par.y = ymax
+	ul.par.x = 0
+	ul.par.y = ymax
+	dr.par.x = xmax
+	dr.par.y = 0
+	dl.par.x = 0
+	dl.par.y = 0	
+
 	return
 
 def whileOn(channel, sampleIndex, val, prev):
